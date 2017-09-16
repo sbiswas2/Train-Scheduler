@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <title>Train Scheduler</title>
+    <!-- Boostrap CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+    	<div class="jumbotron jumbotron-fluid">
+    		<div class="container">
+    			<h1 class="display-3">Choo Choo!!  All Aboard!</h1>
+    		</div>
+    	</div>
+
+        <table class="table" id="trainData">
+            <thead class="thead-default">
+                <tr>
+                    <th>Current Train Schedule</th>
+                    <th>Destination</th>
+                    <th>Frequency</th>
+                    <th>Next Arrival</th>
+                    <th>Minutes Away</th>
+                </tr>
+            </thead>
+            <!-- <tbody>
+                <tr>
+                    <td>Mark Otto</td>
+                    <td>Role</td>
+                    <td>9/13/2017</td>
+                    <td>3</td>
+                    <td>$$ Rate</td>
+                </tr>
+            </tbody> -->
+        </table>
+
+        <div class="card">
+            <div class="card-header">
+                Add Train
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <label for="trainName">Train Name</label>
+                        <input type="text" class="form-control" id="trainName">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" class="form-control" id="destination">
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate">First Train Time (HH:mm - military time)</label>
+                        <input type="text" class="form-control" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="frequency">Frequency (min)</label>
+                        <input type="text" class="form-control" id="frequency">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Firebase JavaScript Link -->
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+    <!-- Link to Moment.js -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+    <script>
+    	var config = {
+    		apiKey: "AIzaSyC7pEpHVOZ6wtoe0ePPm8GZXVnDmv4rC-w",
+    		authDomain: "train-scheduler-3c988.firebaseapp.com",
+    		databaseURL: "https://train-scheduler-3c988.firebaseio.com",
+    		projectId: "train-scheduler-3c988",
+    		storageBucket: "",
+    		messagingSenderId: "92116991241"
+    	};
+    	firebase.initializeApp(config);
+
+    	var database = firebase.database();
+
+    	
+
+    </script>
+
+</body>
