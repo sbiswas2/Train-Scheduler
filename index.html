@@ -9,14 +9,14 @@
 
 <body>
     <div class="container">
-    	<div class="jumbotron jumbotron-fluid">
-    		<div class="container">
-    			<h1 class="display-3">Choo Choo!!  All Aboard!</h1>
+    	<div style="background-color: #007bff;" class="jumbotron jumbotron-fluid">
+    		<div class="container text-center">
+    			<h1 style="color: #fff;" class="display-3">Choo Choo!!  All Aboard!</h1>
     		</div>
     	</div>
 
         <table class="table" id="trainData">
-            <thead class="thead-default">
+            <thead class="thead-inverse">
                 <tr>
                     <th>Current Train Schedule</th>
                     <th>Destination</th>
@@ -25,19 +25,10 @@
                     <th>Minutes Away</th>
                 </tr>
             </thead>
-            <!-- <tbody>
-                <tr>
-                    <td>Mark Otto</td>
-                    <td>Role</td>
-                    <td>9/13/2017</td>
-                    <td>3</td>
-                    <td>$$ Rate</td>
-                </tr>
-            </tbody> -->
         </table>
 
         <div class="card">
-            <div class="card-header">
+            <div style="background-color: black; color: #fff;" class="card-header">
                 Add Train
             </div>
             <div class="card-body">
@@ -74,6 +65,7 @@
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 
     <script>
+    	// firebase
     	var config = {
     		apiKey: "AIzaSyC7pEpHVOZ6wtoe0ePPm8GZXVnDmv4rC-w",
     		authDomain: "train-scheduler-3c988.firebaseapp.com",
@@ -83,65 +75,55 @@
     		messagingSenderId: "92116991241"
     	};
     	firebase.initializeApp(config);
-
     	var database = firebase.database();
-
+    	// creating empty variables ready for input
     	var name = "";
     	var destination = "";
     	var startTime = "";
     	var frequency = "";
 
-    	var now = new Date();
-
     	$("#submitBtn").on("click", function(event) {
-
-       // event.preventDefault();
-
-        name = $("#trainName").val().trim();
-        destination = $("#destination").val().trim();
-        startTime = $("#startTime").val().trim();
-        frequency = $("#frequency").val().trim();
-
-        database.ref().push({
-            name: name,
-            destination: destination,
-            startTime: startTime,
-            frequency: frequency
-        	});
+	        // get values from input boxes
+	        name = $("#trainName").val().trim();
+	        destination = $("#destination").val().trim();
+	        startTime = $("#startTime").val().trim();
+	        frequency = $("#frequency").val().trim();
+	        // send variables to database
+	        database.ref().push({
+	            name: name,
+	            destination: destination,
+	            startTime: startTime,
+	            frequency: frequency
+	        	});
     	});
 
     	database.ref().on("child_added", function(snapshot) {
-    		var now = new Date();
+    		// retrieving variables from database needed for calculations
     		var firstTime = snapshot.val().startTime;
     		var newFrequency = snapshot.val().frequency;
-
+    		// calculations
     		var timeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
     		var currentTime = moment();
     		var diffTime = moment().diff(moment(timeConverted), "minutes");
     		var tRemainder = diffTime % newFrequency;
     		var tMinutesTillTrain = newFrequency - tRemainder;
     		var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-
-
+    		// creating new table
     		var newRow = $("<tr>");
     		var newName = $("<td>").text(snapshot.val().name);
     		var newDestination = $("<td>").text(snapshot.val().destination);
     		var displayFrequency = $("<td>").text(newFrequency);
     		var displayTrain = $("<td>").text(moment(nextTrain).format("LT"));
     		var displayMinutes = $("<td>").text(tMinutesTillTrain);
-    		
-
+    		// appending to the new row
     		newRow.append(newName);
     		newRow.append(newDestination);
     		newRow.append(displayFrequency);
     		newRow.append(displayTrain);
     		newRow.append(displayMinutes);
-
+    		// appending the table
     		$("#trainData").append(newRow);
-
-
     	});
-
 
     </script>
 
