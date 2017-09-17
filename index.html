@@ -20,7 +20,7 @@
                 <tr>
                     <th>Current Train Schedule</th>
                     <th>Destination</th>
-                    <th>Frequency</th>
+                    <th>Frequency (min)</th>
                     <th>Next Arrival</th>
                     <th>Minutes Away</th>
                 </tr>
@@ -91,6 +91,8 @@
     	var startTime = "";
     	var frequency = "";
 
+    	var now = new Date();
+
     	$("#submitBtn").on("click", function(event) {
 
        // event.preventDefault();
@@ -106,6 +108,38 @@
             startTime: startTime,
             frequency: frequency
         	});
+    	});
+
+    	database.ref().on("child_added", function(snapshot) {
+    		var now = new Date();
+    		var firstTime = snapshot.val().startTime;
+    		var newFrequency = snapshot.val().frequency;
+
+    		var timeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
+    		var currentTime = moment();
+    		var diffTime = moment().diff(moment(timeConverted), "minutes");
+    		var tRemainder = diffTime % newFrequency;
+    		var tMinutesTillTrain = newFrequency - tRemainder;
+    		var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+
+
+    		var newRow = $("<tr>");
+    		var newName = $("<td>").text(snapshot.val().name);
+    		var newDestination = $("<td>").text(snapshot.val().destination);
+    		var displayFrequency = $("<td>").text(newFrequency);
+    		var displayTrain = $("<td>").text(moment(nextTrain).format("LT"));
+    		var displayMinutes = $("<td>").text(tMinutesTillTrain);
+    		
+
+    		newRow.append(newName);
+    		newRow.append(newDestination);
+    		newRow.append(displayFrequency);
+    		newRow.append(displayTrain);
+    		newRow.append(displayMinutes);
+
+    		$("#trainData").append(newRow);
+
+
     	});
 
 
